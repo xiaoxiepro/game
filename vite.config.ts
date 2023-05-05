@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite'
-import uni from '@dcloudio/vite-plugin-uni'
-import Components from 'unplugin-vue-components/vite';
-import { VantResolver } from 'unplugin-vue-components/resolvers';
+import { defineConfig } from "vite";
+import uni from "@dcloudio/vite-plugin-uni";
+import Components from "unplugin-vue-components/vite";
+import { VantResolver } from "unplugin-vue-components/resolvers";
+const path = require("path");
 export default defineConfig({
   plugins: [
     uni(),
@@ -19,4 +20,4 @@ export default defineConfig({
     pure: ["console.log"],
     drop: ["debugger"],
   },
-})
+});
