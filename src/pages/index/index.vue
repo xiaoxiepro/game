@@ -53,13 +53,89 @@
         <text>要求金额 > 100USDT</text>
       </view>
     </view>
-    <view class="team-box"></view>
+    <view class="team-box">
+      <view class="team-title-box">
+        <image class="img" src="@/static/imgs/team-img.png" />
+        <text>团队总业绩</text>
+      </view>
+      <view class="team-income">
+        <view class="key-box">
+          <image class="img" src="@/static/imgs/team-income-img.png" />
+          团队收益
+        </view>
+        <text class="income-text">12321344 DEV</text>
+      </view>
+      <view class="tab-box">
+        <view class="tab-list">
+          <view class="tab-item active">大区</view>
+          <view class="tab-item">小区</view>
+        </view>
+      </view>
+      <view class="head-box">
+        <view class="head-item">用户ID</view>
+        <view class="head-item">关系</view>
+        <view class="head-item">收益</view>
+      </view>
+      <view class="body-box">
+        <scroll-view class="scroll-box" scroll-y>
+          <view class="body-row" v-for="i in 20" :key="i">
+            <view class="body-item">0x6dsd***1w2b</view>
+            <view class="body-item">间推</view>
+            <view class="body-item amount">2927.15 DEV</view>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+    <view class="help-box">
+      <view class="help-center-title">
+        <image src="@/static/imgs/help-img.png" class="img" />
+        <text>帮助中心</text>
+      </view>
+      <view class="help-list">
+        <van-collapse v-model="activeNames">
+          <van-collapse-item
+            class="help-item"
+            v-for="(item, index) in 3"
+            :key="index"
+            :title="index"
+            :name="item"
+          >
+            {{ index }}
+          </van-collapse-item>
+        </van-collapse>
+      </view>
+    </view>
+    <foot />
+    <com-pup />
   </view>
 </template>
 
-<script></script>
+<script setup>
+import { ref } from "vue";
+const activeNames = ref([]);
+console.log(activeNames.value);
+</script>
 
 <style lang="scss" scoped>
+.help-item {
+  width: 606rpx;
+  margin-top: 24rpx;
+  &:first-child {
+    margin-top: 36rpx;
+  }
+  :deep(.van-cell) {
+    background: rgba($color: #eeeeee, $alpha: 0.5) !important;
+    border-radius: 8rpx;
+    color: #333;
+  }
+  :deep(.van-collapse-item__content) {
+    padding: 34rpx 24rpx;
+    background: rgba($color: #eeeeee, $alpha: 0.5);
+    font-size: 28rpx;
+    color: #072f3d;
+    border-radius: 8rpx;
+  }
+}
 .index-page {
   width: 100%;
   min-height: 100vh;
@@ -208,6 +284,154 @@
     margin: auto;
     margin-top: 44rpx;
     background: url("@/static/imgs/team-bg.png") 0 0/100% 100%;
+    padding-top: 72rpx;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 50rpx;
+    .team-title-box {
+      width: 100%;
+      padding-left: 54rpx;
+      display: flex;
+      align-items: center;
+      font-size: 28rpx;
+      font-weight: 400;
+      color: #ffffff;
+      .img {
+        width: 47rpx;
+        height: 41rpx;
+        margin-right: 12rpx;
+      }
+    }
+    .team-income {
+      width: 606rpx;
+      height: 64rpx;
+      padding: 0 24rpx;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: url("@/static/imgs/team-income-bg.png") 0 0/100% 100%;
+      margin: auto;
+      margin-top: 24rpx;
+      .income-text {
+        font-size: 28rpx;
+        font-weight: 400;
+        color: #ffffff;
+      }
+      .key-box {
+        display: flex;
+        align-items: center;
+        font-size: 28rpx;
+        font-weight: 400;
+        color: #072f3d;
+        .img {
+          width: 41rpx;
+          height: 40rpx;
+          margin-right: 12rpx;
+        }
+      }
+    }
+    .tab-box {
+      width: 606rpx;
+      height: 94rpx;
+      background: linear-gradient(
+        180deg,
+        rgba(233, 241, 255, 0) 0%,
+        rgba(39, 189, 246, 0.5) 55%,
+        #52eaef 100%
+      );
+      margin: auto;
+      margin-top: 34rpx;
+      border-radius: 16rpx;
+      padding: 12rpx;
+      .tab-list {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        .tab-item {
+          flex: 1;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 32rpx;
+          font-weight: 400;
+          color: #072f3d;
+          &.active {
+            color: #ffffff;
+            background: url("@/static/imgs/tab-item-bg.png") 0 0/100% 100%;
+          }
+        }
+      }
+    }
+    .head-box {
+      width: 100%;
+      padding: 12rpx 55rpx;
+      margin-top: 16rpx;
+      display: grid;
+      grid-template-columns: 40% 20% 40%;
+      .head-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 28rpx;
+        font-weight: 400;
+        color: #ffffff;
+      }
+    }
+
+    .body-box {
+      flex: 1;
+      width: 100%;
+      height: 0;
+      padding: 0 55rpx;
+      .scroll-box {
+        width: 100%;
+        height: 100%;
+
+        .body-row {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 40% 20% 40%;
+          .body-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28rpx;
+            font-weight: 400;
+            color: #072f3d;
+            &:not(:last-child) {
+              margin-bottom: 26rpx;
+            }
+            &.amount {
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+  .help-box {
+    width: 716rpx;
+    min-height: 802rpx;
+    margin: auto;
+    margin-top: 30rpx;
+    background: url("@/static/imgs/help-bg.png") 0 0/100% 100%;
+    padding: 55rpx;
+    padding-top: 62rpx;
+    .help-center-title {
+      display: flex;
+      align-items: center;
+      font-size: 28rpx;
+      font-weight: 400;
+      color: #ffffff;
+
+      margin-bottom: 32rpx;
+      .img {
+        width: 45rpx;
+        height: 42rpx;
+        margin-right: 14rpx;
+      }
+    }
   }
 }
 </style>

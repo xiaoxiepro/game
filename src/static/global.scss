@@ -13,6 +13,10 @@ body {
 uni-toast {
   z-index: 999999 !important;
 }
+.van-popup {
+  max-width:100vw!important;
+  width:100vw!important ;
+}
 .no-data {
   width: 100%;
   height: 100%;

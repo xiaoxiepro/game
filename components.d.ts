@@ -15,5 +15,8 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TokenBox: typeof import('./src/components/tokenBox/tokenBox.vue')['default']
+    VanCollapse: typeof import('vant/es')['Collapse']
+    VanCollapseItem: typeof import('vant/es')['CollapseItem']
+    VanPopup: typeof import('vant/es')['Popup']
   }
 }

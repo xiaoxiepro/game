@@ -13,7 +13,7 @@
           class="img"
         />
         <image v-else :src="item.icon" class="img" />
-        <text class="text select">{{ t(item.text) }}</text>
+        <text class="text select">{{ item.text }}</text>
       </view>
     </view>
   </view>
@@ -42,20 +42,24 @@ const goPage = (url) => {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 750rpx;
+  width: 100%;
   height: 144rpx;
-  background: rgba($color: #ffffff, $alpha: 0.8);
+  background: linear-gradient(
+    180deg,
+    rgba(233, 241, 255, 0) 0%,
+    rgba(39, 189, 246, 0.5) 55%,
+    #52eaef 100%
+  );
   display: flex;
   justify-content: center;
   align-items: center;
   .tab-list {
     width: 686rpx;
     height: 112rpx;
-    background: #ffffff;
-    box-shadow: 0px 4rpx 12rpx 2rpx rgba(0, 0, 0, 0.1);
+    background: #80d8f1;
+    box-shadow: 0rpx 4rpx 12rpx 2rpx rgba(0, 0, 0, 0.1);
     border-radius: 56rpx;
     display: flex;
-    padding: 0 80rpx;
     .tab-item {
       flex: 1;
       display: flex;
@@ -63,14 +67,16 @@ const goPage = (url) => {
       align-items: center;
       justify-content: center;
       .img {
-        width: 46rpx;
-        height: 47rpx;
+        width: 40rpx;
+        height: 41rpx;
+        margin-bottom: 2rpx;
       }
       .text {
         font-size: 24rpx;
-        color: #999999;
+        font-weight: 500;
+        color: #ffffff;
         &.select {
-          color: #4c426e;
+          color: #072f3d;
         }
       }
     }
