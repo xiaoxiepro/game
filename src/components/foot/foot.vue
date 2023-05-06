@@ -43,6 +43,7 @@ const goPage = (url) => {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
+  max-width: 450px;
   height: 144rpx;
   background: linear-gradient(
     180deg,
