@@ -8,6 +8,9 @@
     },
     {
       "path": "pages/my/my"
+    },
+    {
+      "path": "pages/list/list"
     }
   ],
   "globalStyle": {

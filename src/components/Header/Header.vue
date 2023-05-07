@@ -1,11 +1,21 @@
 <template>
   <view class="head-box">
-    <text class="title-text">幸福小镇</text>
+    <image v-if="status" src="@/static/imgs/back.png" class="back-img" />
+    <text v-else class="title-text">幸福小镇</text>
     <image src="@/static/imgs/lang-img.png" class="lang-img" />
   </view>
 </template>
 
-<script></script>
+<script>
+export default {
+  props: {
+    status: {
+      default: false,
+      type: Boolean,
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 .head-box {
@@ -23,6 +33,10 @@
   .lang-img {
     width: 82rpx;
     height: 82rpx;
+  }
+  .back-img {
+    width: 80rpx;
+    height: 80rpx;
   }
 }
 </style>
