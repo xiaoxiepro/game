@@ -3,21 +3,21 @@ export default [
         index: 0,
         icon: "../../static/imgs/token.png",
         selectIcon: "../../static/imgs/token-select.png",
-        text: '首页',
+        text: "shou-ye",
         pages: "/pages/index/index"
     },
     {
         index: 1,
         icon: "../../static/imgs/token.png",
         selectIcon: "../../static/imgs/token-select.png",
-        text: '令牌',
+        text: "ling-pai",
         pages: "/pages/token/token"
     },
     {
         index: 2,
         icon: "../../static/imgs/token.png",
         selectIcon: "../../static/imgs/token-select.png",
-        text: '我的',
+        text: "wo-de",
         pages: "/pages/my/my"
     }
 ]

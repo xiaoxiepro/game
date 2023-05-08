@@ -91,29 +91,34 @@
         <image src="@/static/imgs/help-img.png" class="img" />
         <text>帮助中心</text>
       </view>
-      <view class="help-list">
+      <view class="help-list" v-if="useRoot.helpList.length">
         <van-collapse v-model="activeNames">
           <van-collapse-item
             class="help-item"
-            v-for="(item, index) in 3"
+            v-for="(item, index) in useRoot.helpList.length / 2"
             :key="index"
-            :title="index"
+            :title="useRoot.helpList[2 * index]"
             :name="item"
           >
-            {{ index }}
+            {{ useRoot.helpList[2 * index + 1] }}
           </van-collapse-item>
         </van-collapse>
       </view>
     </view>
-    <foot />
+    <foot :selectIndex="0" />
     <com-pup />
   </view>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { textOmit } from "@/utils";
+import usePupStatus from "@/hooks/usePupStatus";
+import { useRootStore } from "@/store/Root";
+import { useI18n } from "vue-i18n";
+const useRoot = useRootStore();
+const { t } = useI18n();
 const activeNames = ref([]);
-console.log(activeNames.value);
 </script>
 
 <style lang="scss" scoped>

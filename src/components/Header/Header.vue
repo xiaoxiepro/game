@@ -6,15 +6,15 @@
   </view>
 </template>
 
-<script>
-export default {
-  props: {
-    status: {
-      default: false,
-      type: Boolean,
-    },
+<script setup>
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+defineProps({
+  status: {
+    default: false,
+    type: Boolean,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

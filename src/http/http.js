@@ -3,7 +3,7 @@ const protocol = window.location.protocol
 const host = window.location.host
 const BASE_URL =
   process.env.NODE_ENV === 'development'
-    ? 'http://api.posdefi.bsc-tron.top'
+    ? 'http://api.gamedefi.bsc-tron.top'
     : protocol + '//api.' + host
 export const http = (options, customOptions) => {
   // 自定义配置

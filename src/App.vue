@@ -1,14 +1,30 @@
-<script setup lang="ts">
+<script setup>
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
-onLaunch(() => {
-  console.log("App Launch");
+import { useRootStore } from "@/store/Root";
+import { getCurrentInstance } from "vue";
+import { goUrl } from "@/utils/";
+const { proxy } = getCurrentInstance();
+const useRoot = useRootStore();
+onLaunch(async () => {
+  ethereum.on("accountsChanged", (accounts) => {
+    //一旦切换账号这里就会执行
+    // window.location.reload()
+    if (accounts[0] !== useRoot.address) {
+      goUrl("/pages/index/index");
+      window.location.reload();
+    } else if (!accounts[0]) {
+      uni.removeStorageSync("x-token");
+      goUrl("/pages/index/index");
+    }
+  });
+  useRoot.getHelpList();
+  uni.showLoading({ mask: true });
+  await useRoot.getConfig();
+  await useRoot.login();
+  proxy.$isResolve();
 });
-onShow(() => {
-  console.log("App Show");
-});
-onHide(() => {
-  console.log("App Hide");
-});
+onShow(() => {});
+onHide(() => {});
 </script>
 <style lang="scss">
 page {

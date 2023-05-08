@@ -29,12 +29,15 @@
         </view>
       </view>
     </view>
-    <foot />
+    <foot :selectIndex="1" />
   </view>
 </template>
 
-<script>
-export default {};
+<script setup>
+import { useRootStore } from "@/store/Root";
+import { useI18n } from "vue-i18n";
+const useRoot = useRootStore();
+const { t } = useI18n();
 </script>
 
 <style lang="scss" scoped>

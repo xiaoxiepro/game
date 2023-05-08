@@ -6,12 +6,17 @@
     </view>
     <view class="address-box">
       <image src="@/static/imgs/address-img.png" class="address-img" />
-      <text class="address-text">0x6dsd***1w2b34</text>
+      <text class="address-text">{{ textOmit(useRoot.address, 6, 6) }}</text>
     </view>
   </view>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRootStore } from "@/store/Root";
+import { textOmit } from "@/utils";
+
+const useRoot = useRootStore();
+</script>
 
 <style lang="scss" scoped>
 .token-box {

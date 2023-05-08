@@ -13,7 +13,7 @@
           class="img"
         />
         <image v-else :src="item.icon" class="img" />
-        <text class="text select">{{ item.text }}</text>
+        <text class="text select">{{ t(item.text) }}</text>
       </view>
     </view>
   </view>
