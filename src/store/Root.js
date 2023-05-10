@@ -105,25 +105,11 @@ export const useRootStore = defineStore('Root', {
         }
         // 保存配置信息
         this.config = res
-
-        this.pledgeOut = res.config.static.pledge_out
-
-        this.tierArr = res.config.tier
-        this.generationArr = res.config.generation
-        this.pledgeData = res.config.pledge
         this.nowTime = this.config.date
         this.inAddress = res.chain.inout.in_address
         this.outAddress = res.chain.inout.out_address
-        this.stakeMax = res.config.pledgeNum.pledge_max
-        this.stakeMin = res.config.pledgeNum.pledge_min
-        this.stakeFree = res.config.pledgeNum.pledge_fee
-        this.stakeAmountArr = res.config.pledgeNum.pledge_rapid
         this.defaultLanguage = this.config.language.default
         this.telegarm = res.config.telegram
-        if (!uni.getStorageSync('language')) {
-          uni.setStorageSync('language', this.defaultLanguage)
-        }
-        console.log(1111);
       } catch (err) {
         uni.hideLoading()
         console.log(err)
@@ -264,85 +250,90 @@ export const useRootStore = defineStore('Root', {
             ...this.base,
           })
           .then(async (transactionHash) => {
-            try {
-              await outputPay({
-                order_no: orderObj.order_no,
-                tx_id: transactionHash,
-                outStatus: true,
-              })
-            } catch (err) {
-              console.log(err);
-            }
-            let a = 0
-            const queryOrder = async () => {
-              const res = await bsc.getTransaction(transactionHash)
-              console.log(res);
-              if (a > 7) {
-                try {
-                  await outputPay({
-                    order_no: orderObj.order_no,
-                    tx_id: transactionHash,
-                    outStatus: true,
-                  })
-                  uni.showToast({
-                    title: translate('cc'),
-                    duration: 2000
-                  });
-                } catch (err) {
-                  uni.showToast({
-                    title: translate('cc'),
-                    duration: 2000
-                  });
-                  console.log(err);
-                }
+            outputPay({
+              order_no: orderObj.order_no,
+              tx_id: transactionHash,
+              outStatus: true,
+            }).then(async () => {
+              if (callback) {
+                await callback()
               }
-              else if (res && res?.blockHash && res?.status) {
-                let num = 1
-                let request1 = () => {
-                  console.log(111111111);
-                  outputPay({
-                    order_no: orderObj.order_no,
-                    tx_id: transactionHash,
-                    outStatus: true,
-                  })
-                    .then(async (res) => {
-                      console.log(res.code)
-                      if (res.code == 200) {
-                        if (callback) {
-                          await callback()
+              await this.getUserInfo()
+              uni.hideLoading()
+              notify(translate('gou-mai-cheng-gong'))
+            }).catch(() => {
+              let a = 0
+              const queryOrder = async () => {
+                const res = await bsc.getTransaction(transactionHash)
+                console.log(res);
+                if (a > 7) {
+                  try {
+                    await outputPay({
+                      order_no: orderObj.order_no,
+                      tx_id: transactionHash,
+                      outStatus: true,
+                    })
+                    uni.showToast({
+                      title: translate('cc'),
+                      duration: 2000
+                    });
+                  } catch (err) {
+                    uni.showToast({
+                      title: translate('cc'),
+                      duration: 2000
+                    });
+                    console.log(err);
+                  }
+                }
+                else if (res && res?.blockHash && res?.status) {
+                  let num = 1
+                  let request1 = () => {
+                    outputPay({
+                      order_no: orderObj.order_no,
+                      tx_id: transactionHash,
+                      outStatus: true,
+                    })
+                      .then(async (res) => {
+                        console.log(res.code)
+                        if (res.code == 200) {
+                          if (callback) {
+                            await callback()
+                          }
+                          await this.getUserInfo()
+                          uni.hideLoading()
+                          notify(translate('gou-mai-cheng-gong'))
+                        } else if (res.code != 200 && num <= 20) {
+                          num++
+                          setTimeout(request1, 2000)
+                        } else {
+                          uni.hideLoading()
+                          notify(translate('gou-mai-shi-bai'), 2000, { background: '#ee0a24' })
                         }
-                        await this.getUserInfo()
-                        uni.hideLoading()
-                        notify(translate('gou-mai-cheng-gong'))
-                      } else if (res.code != 200 && num <= 20) {
-                        num++
-                        setTimeout(request1, 2000)
-                      } else {
-                        uni.hideLoading()
-                        notify(translate('gou-mai-shi-bai'), 2000, { background: '#ee0a24' })
-                      }
-                    })
-                    .catch((err) => {
-                      if (err.data.code != 200 && num <= 20) {
-                        num++
-                        setTimeout(request1, 2000)
-                      } else {
-                        uni.hideLoading()
-                        notify(translate('gou-mai-shi-bai'), 2000, { background: '#ee0a24' })
-                      }
-                      console.log(err)
-                    })
+                      })
+                      .catch((err) => {
+                        if (err.data.code != 200 && num <= 20) {
+                          num++
+                          setTimeout(request1, 2000)
+                        } else {
+                          uni.hideLoading()
+                          notify(translate('gou-mai-shi-bai'), 2000, { background: '#ee0a24' })
+                        }
+                        console.log(err)
+                      })
+                  }
+                  request1()
+                } else if (res && !res?.status) {
+                  uni.hideLoading()
+                  notify(translate('gou-mai-shi-bai'), 2000, { background: '#ee0a24' })
+                } else {
+                  a++
+                  setTimeout(queryOrder, 2000)
                 }
-                request1()
-              } else if (res && !res?.status) {
-                uni.hideLoading()
-                notify(translate('gou-mai-shi-bai'), 2000, { background: '#ee0a24' })
-              } else {
-                a++
-                setTimeout(queryOrder, 2000)
               }
-            }
-            queryOrder()
+              queryOrder()
+            })
+
+
           })
           .catch((err) => {
             uni.hideLoading()
@@ -352,97 +343,6 @@ export const useRootStore = defineStore('Root', {
       } catch (err) {
         uni.hideLoading()
         notify(translate('jiao-yi-shi-bai'), 2000, { background: '#ee0a24' })
-      }
-    },
-    async buyPlayerAction1(amount, fun) {
-      const { confirmStatus } = usePupStatus();
-      try {
-        uni.showLoading({
-          mask: true,
-          title: translate('jiao-yi-zhong-qing-wu-guan-bi-ye-mian'),
-        })
-        this.walletAmount = await bsc.balance(this.address, true)
-        this.walletAmount = Fixed(this.walletAmount, 6)
-        if (Number(amount) > Number(this.walletAmount)) {
-          uni.showToast({
-            mask: true,
-            icon: "error",
-            title: translate('yuebu-zu'),
-          })
-          return
-        }
-        const orderObj = await createOrder({
-          total: amount,
-        })
-        bsc
-          .request({
-            fromAddress: this.address,
-            toAddress: this.inAddress,
-            quantity: amount,
-          })
-          .then(async (transactionHash) => {
-            try {
-              await outputPay({
-                order_no: orderObj.order_no,
-                tx_id: transactionHash,
-                outStatus: true,
-              })
-            } catch (err) {
-              console.log(err);
-            }
-            const queryOrder = async () => {
-              const res = await bsc.getTransaction(transactionHash)
-              if (res && res?.blockHash && res?.status) {
-                let num = 1
-                let request1 = () => {
-                  outputPay({
-                    order_no: orderObj.order_no,
-                    tx_id: transactionHash,
-                    outStatus: true,
-                  })
-                    .then(async (res) => {
-                      console.log(res.code)
-                      if (res.code == 200) {
-                        this.getUserInfo()
-                        this.getConfig()
-                        if (fun) {
-                          await fun()
-                        }
-                        this.walletAmount = await bsc.balance(this.address, true)
-                        this.walletAmount = Fixed(this.walletAmount, 6)
-                        uni.hideLoading()
-                        confirmStatus.value = false
-                        notify(translate('jiao-yi-cheng-gong'))
-                      }
-                    })
-                    .catch((err) => {
-                      console.log(err)
-                      if (err.data.code != 200 && num <= 20) {
-                        num++
-                        setTimeout(request1, 2000)
-                      } else {
-                        uni.hideLoading()
-                        notify(translate('jiao-yi-shi-bai'), 2000, { background: '#ee0a24' })
-                      }
-                    })
-                }
-                request1()
-              } else if (res && !res?.status) {
-                uni.hideLoading()
-                notify(translate('jiao-yi-shi-bai'), 2000, { background: '#ee0a24' })
-              } else {
-                setTimeout(queryOrder, 2000)
-              }
-            }
-            queryOrder()
-          })
-          .catch((err) => {
-            uni.hideLoading()
-            notify(translate('jiao-yi-shi-bai'), 2000, { background: '#ee0a24' })
-            console.log(err)
-          })
-      } catch (err) {
-        console.log(err)
       }
     },
   },
